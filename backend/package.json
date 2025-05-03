@@ -2,8 +2,9 @@
   "name": "chatdr_test",
   "version": "1.0.0",
   "description": "",
-  "main": "test_script.js",
+  "main": "test_server.js",
   "scripts": {
+    "start": "node test_server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
