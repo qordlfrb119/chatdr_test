@@ -7,7 +7,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
 console.log("✅ API Key 확인:", process.env.OPENAI_API_KEY);
 
 const openai = new OpenAI({
@@ -34,12 +33,22 @@ app.post('/chat', async (req, res) => {
 - 증상: ${data.symptom}
 `;
 
-  const chatCompletion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: prompt }],
-  });
+  try {
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+    });
 
-  res.json({ reply: chatCompletion.choices[0].message.content });
+    res.json({ reply: chatCompletion.choices[0].message.content });
+  } catch (error) {
+    console.error("❌ OpenAI API 오류:", error);
+    res.status(500).json({ error: "OpenAI 요청 실패" });
+  }
 });
 
-app.listen(3000, () => console.log('Server is running on port 3000'));
+// ⭐ 포트 설정을 Render 호환 방식으로 수정
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`🚀 Server is running on port ${port}`);
+});
+
